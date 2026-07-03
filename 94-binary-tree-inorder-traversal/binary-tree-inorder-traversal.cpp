@@ -9,20 +9,51 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+// class Solution {
+// public:
+// vector<int> ans;
+//     void inorder(TreeNode* root){
+//         if(root==NULL){
+//             return;
+//         }
+
+//         inorder(root->left);
+//         ans.push_back(root->val);
+//         inorder(root->right);
+//     }
+//     vector<int> inorderTraversal(TreeNode* root) {
+//         inorder(root);
+//         return ans;
+//     }
+// };
+
 class Solution {
 public:
-vector<int> ans;
-    void inorder(TreeNode* root){
-        if(root==NULL){
-            return;
-        }
 
-        inorder(root->left);
-        ans.push_back(root->val);
-        inorder(root->right);
-    }
     vector<int> inorderTraversal(TreeNode* root) {
-        inorder(root);
+      vector<int> ans;
+        stack<TreeNode*> st;
+        TreeNode* curr = root;
+
+        // Loop runs as long as there are nodes to visit OR elements in the stack
+        while (curr != nullptr || !st.empty()) {
+            
+            // 1. Go as deep left as possible, caching parents on the stack
+            while (curr != nullptr) {
+                st.push(curr);
+                curr = curr->left;
+            }
+
+            // 2. Current is now nullptr, so pop the last valid parent node
+            curr = st.top();
+            st.pop();
+
+            // 3. Process the Node (Root step)
+            ans.push_back(curr->val);
+
+            // 4. Move to the right subtree
+            curr = curr->right;
+        }
         return ans;
     }
 };
