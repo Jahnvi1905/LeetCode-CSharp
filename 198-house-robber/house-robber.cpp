@@ -33,31 +33,53 @@
 
 class Solution {
 public:
-    int rob(vector<int>& nums) {
-        int n = nums.size();
-        if (n == 0) return 0;
-        if (n == 1) return nums[0]; // Fixed: Changed from 'nums' to 'nums[0]'
 
-        // Instead of a vector, use two variables to store previous results
-        int prev2 = nums[0];          // Fixed: Changed from 'nums' to 'nums[0]'
-        int prev1 = max(nums[0], nums[1]); // Fixed: Changed to compare index 0 and 1
-
-        for (int i = 2; i < n; i++) {
-            // Option 1: Pick current house + optimal from 2 houses back
-            int pick = nums[i] + prev2;
-            
-            // Option 2: Skip current house, keep optimal from 1 house back
-            int notPick = prev1;
-
-            int current = max(pick, notPick);
-            
-            // Shift state variables forward for the next iteration
-            prev2 = prev1;
-            prev1 = current;
+    int slove(int i,vector<int>& nums,vector<int>& dp){
+        if(i<0){
+            return  0;
         }
+        if(dp[i] != -1){
+            return dp[i];
+        }
+        int skip = slove(i-1,nums,dp);
+        int rob = slove(i-2,nums,dp) + nums[i];
 
-        return prev1; 
+        return dp[i] = max(skip,rob);
+    }
+    int rob(vector<int>& nums) {
+        int n=nums.size();
+        vector<int>dp(n,-1);
+        return slove(n-1,nums,dp);
     }
 };
+
+// class Solution {
+// public:
+//     int rob(vector<int>& nums) {
+//         int n = nums.size();
+//         if (n == 0) return 0;
+//         if (n == 1) return nums[0]; // Fixed: Changed from 'nums' to 'nums[0]'
+
+//         // Instead of a vector, use two variables to store previous results
+//         int prev2 = nums[0];          // Fixed: Changed from 'nums' to 'nums[0]'
+//         int prev1 = max(nums[0], nums[1]); // Fixed: Changed to compare index 0 and 1
+
+//         for (int i = 2; i < n; i++) {
+//             // Option 1: Pick current house + optimal from 2 houses back
+//             int pick = nums[i] + prev2;
+            
+//             // Option 2: Skip current house, keep optimal from 1 house back
+//             int notPick = prev1;
+
+//             int current = max(pick, notPick);
+            
+//             // Shift state variables forward for the next iteration
+//             prev2 = prev1;
+//             prev1 = current;
+//         }
+
+//         return prev1; 
+//     }
+// };
 
 
